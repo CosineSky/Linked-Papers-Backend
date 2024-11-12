@@ -1,31 +1,42 @@
+import numpy as np
 import pandas as pd
 from ..models import Essay
 from sqlalchemy import create_engine
 
 
-def load_essay():
-    # 假设你已经有一个DataFrame
-    df = pd.DataFrame({
-        'title': ['Paper 1', 'Paper 2', 'Paper 3'],
-        'abstract': ['Abstract 1', 'Abstract 2', 'Abstract 3'],
-        'publish_year': [2018, 2019, 2020],
-        'category': [1, 2, 3]
-    })
+def convert_to_blob(row):
+    vector = row.values.astype(np.float32)
+    return vector.tobytes()
 
-    # 创建数据库连接，SQLite数据库文件路径
+
+def load_csv():
+    df_essays = pd.read_csv('./csv/papers.csv')
+    df_feats = pd.read_csv('./csv/feats.csv', header=None)
+    df_feats.columns = [f'feature_{i + 1}' for i in range(128)]
+    df_feats['features'] = df_feats.apply(convert_to_blob, axis=1)
+    df = pd.concat([df_essays, df_feats['features']], axis=1)
+    print("load_csv() finished!")
+    return df
+
+
+def load_essay():
+    # Establish database connection.
     engine = create_engine('sqlite:///db.sqlite3')
 
-    # 将DataFrame写入数据库（如果表存在会覆盖，若不存在则会创建）
+    # Writing dataframe into database.
+    df = load_csv()
     df.to_sql('linked_papers_essay', con=engine, if_exists='replace', index=False)
 
-    # 将DataFrame行转换为Essay对象列表
+    # Convert dataframe into Essay object list.
     papers = [
         Essay(title=row['title'],
               abstract=row['abstract'],
-              publish_year=row['publish_year'],
-              category=row['category'])
+              publish_year=row['year'],
+              category=row['category'],
+              features=row['features'])
         for index, row in df.iterrows()
     ]
 
-    # 批量插入
+    # Insertion.
     Essay.objects.bulk_create(papers)
+    print("load_essay() finished!")

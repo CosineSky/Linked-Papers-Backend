@@ -5,7 +5,6 @@ from django.db import models
 
 
 class User(models.Model):
-    # id = models.AutoField(primary_key=True)
     user = models.CharField(max_length=16)
     password = models.CharField(max_length=16)
     email = models.EmailField(unique=True)
@@ -16,18 +15,17 @@ class User(models.Model):
 
 
 class Essay(models.Model):
-    # id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=256)
     abstract = models.TextField()
     publish_year = models.IntegerField()
-    category = models.IntegerField()
+    category = models.CharField(max_length=16)
+    features = models.BinaryField(default=b'')
 
     def __str__(self):
         return str(self.id) + " (" + str(self.category) + ")"
 
 
 class Edge(models.Model):
-    # id = models.AutoField(primary_key=True)
     essay_id = models.IntegerField()
     cited_id = models.IntegerField()
 
