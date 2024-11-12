@@ -5,7 +5,7 @@ from django.db import models
 
 
 class User(models.Model):
-    id = models.IntegerField(primary_key=True)
+    # id = models.AutoField(primary_key=True)
     user = models.CharField(max_length=16)
     password = models.CharField(max_length=16)
     email = models.EmailField(unique=True)
@@ -16,7 +16,7 @@ class User(models.Model):
 
 
 class Essay(models.Model):
-    id = models.IntegerField(primary_key=True)
+    # id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=256)
     abstract = models.TextField()
     publish_year = models.IntegerField()
@@ -27,7 +27,7 @@ class Essay(models.Model):
 
 
 class Edge(models.Model):
-    id = models.IntegerField(primary_key=True)
+    # id = models.AutoField(primary_key=True)
     essay_id = models.IntegerField()
     cited_id = models.IntegerField()
 

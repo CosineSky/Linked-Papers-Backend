@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'cossky.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'linked_papers_db.sqlite3',
     }
 }
 
