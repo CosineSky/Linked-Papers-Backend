@@ -11,5 +11,5 @@ urlpatterns = [
 
     path("essay/<int:essayId>/related", views.related, name="related"),
 
-    path("essay/category/<slug:categoryName>", views.category, name="category"),
+    path("essay/<int:essayId>/category/<int:page>", views.category, name="category"),
 ]

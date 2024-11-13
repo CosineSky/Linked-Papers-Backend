@@ -1,7 +1,4 @@
 # Create your views here.
-from django.http import HttpResponse, Http404, JsonResponse
-from django.shortcuts import render, get_object_or_404
-from .models import User
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -19,31 +16,31 @@ from .data_load import edge as test_edge_load
 
 @api_view(['GET'])
 def search(request, keyword, page):
-    test_essay_load.load_essay()
-    test_edge_load.load_edge()
+    # test_essay_load.load_essay()
+    # test_edge_load.load_edge()
     data = search_data.fetch(keyword, page)
     return Response(data)
 
 
 @api_view(['GET'])
 def detail(request, essayId):
-    data = {'message': f'Hello, detail! (essayId = {essayId})'}
+    data = detail_data.fetch(essayId)
     return Response(data)
 
 
 @api_view(['GET'])
 def cited(request, essayId):
-    data = {'message': f'Hello, cited! (essayId = {essayId})'}
+    data = cited_data.fetch(essayId)
     return Response(data)
 
 
 @api_view(['GET'])
 def related(request, essayId):
-    data = {'message': f'Hello, related! (essayId = {essayId})'}
-    return Response(data)
+    # TODO
+    return None
 
 
 @api_view(['GET'])
-def category(request, categoryName):
-    data = {'message': f'Hello, category! (categoryName = {categoryName})'}
+def category(request, essayId, page):
+    data = category_data.fetch(essayId, page)
     return Response(data)
